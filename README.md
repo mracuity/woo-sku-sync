@@ -1,392 +1,159 @@
-# \# SKU Price Sync System
+# SKU Price Sync System
 
-# 
+Sync WooCommerce product prices and stock from a Google Sheets CSV URL using background processing.
 
-# Sync WooCommerce product prices directly from a Google Sheets CSV URL — efficiently and safely — using background processing.
+---
 
-# 
+## Overview
 
-# \---
+SKU Price Sync System is a WooCommerce plugin that updates product pricing and inventory by matching SKUs from a centralized Google Sheets CSV.
 
-# 
+It is designed for multi-site usage and updates only existing products. No new products are created.
 
-# \## 🚀 Overview
+---
 
-# 
+## Features
 
-# \*\*SKU Price Sync System\*\* is a lightweight WooCommerce plugin designed to automatically update product prices by matching SKUs from a centralized Google Sheets CSV.
+* Automated sync from Google Sheets CSV
+* Matches by product SKU and variation SKU
+* Updates regular price, sale price, and stock
+* Background processing to prevent timeouts
+* Safe execution with no duplicate sync runs
+* Multi-site compatible
 
-# 
+---
 
-# It is built for scalability and multi-site usage, ensuring that each store only updates its own existing products without creating duplicates or unnecessary load on the server.
+## CSV Structure
 
-# 
+Your Google Sheet must be published as CSV and follow this format:
 
-# \---
+| sku       | regular_price | sale_price | stock |
+| --------- | ------------- | ---------- | ----- |
+| ABC123    | 19.99         | 17.99      | 10    |
+| VAR-RED-M | 24.50         |            | 5     |
 
-# 
+Requirements:
 
-# \## ⚙️ Key Features
+* sku must match an existing WooCommerce product or variation SKU
+* regular_price and sale_price must be valid numbers
+* leave sale_price empty if not applicable
+* stock must be a valid integer
+* first row must contain headers
 
-# 
+---
 
-# \* 🔄 \*\*Automated Price Sync\*\*
+## Raw CSV Example
 
-# 
+```
+sku,regular_price,sale_price,stock
+ABC123,19.99,17.99,10
+VAR-RED-M,24.50,,5
+```
 
-# &#x20; \* Fetches product pricing from a Google Sheets CSV URL
+---
 
-# &#x20; \* Matches products using \*\*SKU and variation SKU\*\*
+## Google Sheets Setup
 
-# 
+1. Create a Google Sheet
+2. Go to File → Share → Publish to web
+3. Select CSV format
+4. Copy the URL
+5. Add it in plugin settings
 
-# \* 🧠 \*\*Smart Update Logic\*\*
+---
 
-# 
+## Installation
 
-# &#x20; \* Updates only existing products
+1. Clone or download the repository
+   https://github.com/mracuity/woo-sku-sync
 
-# &#x20; \* Skips unchanged prices (optional optimization-ready)
+2. Upload to:
+   /wp-content/plugins/
 
-# 
+3. Activate from WordPress Admin → Plugins
 
-# \* ⚡ \*\*Background Processing\*\*
+---
 
-# 
+## Configuration
 
-# &#x20; \* Runs sync tasks without slowing down your website
+* Add your Google Sheets CSV URL
+* Run sync manually or via scheduler (if enabled)
 
-# &#x20; \* Prevents timeouts on large catalogs
+---
 
-# 
+## Sync Behavior
 
-# \* 🔒 \*\*Safe \& Controlled Execution\*\*
+* Matches products using sku
 
-# 
+* Supports simple and variable products
 
-# &#x20; \* No product creation — only updates
+* Updates:
 
-# &#x20; \* Built-in safeguards to prevent duplicate sync runs
+  * regular_price
+  * sale_price (if provided)
+  * stock quantity
 
-# 
+* Ignores:
 
-# \* 🌐 \*\*Multi-Site Compatible\*\*
+  * missing SKUs
+  * invalid rows
 
-# 
+---
 
-# &#x20; \* Use the same CSV across multiple WooCommerce stores
+## Requirements
 
-# &#x20; \* Each store updates only its own matching SKUs
+* WordPress 5.8+
+* PHP 7.4+
+* WooCommerce 6.0+
 
-# 
+---
 
-# \---
+## Version
 
-# 
+1.0.2
 
-# \## 📄 CSV Structure
+---
 
-# 
+## Author
 
-# Your Google Sheet must be published as a \*\*CSV\*\* and follow this format:
+Mr. Acuity
+https://github.com/mracuity
 
-# 
+---
 
-# | SKU       | Price |
+## License
 
-# | --------- | ----- |
+GPL-2.0+
 
-# | ABC123    | 19.99 |
+---
 
-# | VAR-RED-M | 24.50 |
+## Notes
 
-# 
+* Ensure SKU consistency
+* Empty sale_price will remove sale pricing
+* Test on staging before production
+* Background processing improves performance on large catalogs
 
-# \*\*Requirements:\*\*
+---
 
-# 
+## Future Plans
 
-# \* SKU must match existing WooCommerce product or variation SKU
+* Change detection (update only if needed)
+* Scheduled auto sync
+* Admin logs and monitoring
+* CSV validation
 
-# \* Price should be a valid numeric value
+---
 
-# \* First row should contain headers
+## Plugin Metadata
 
-# 
-
-# \---
-
-# 
-
-# \## 🔗 Google Sheets Setup
-
-# 
-
-# 1\. Create your pricing sheet in Google Sheets
-
-# 2\. Go to \*\*File → Share → Publish to web\*\*
-
-# 3\. Select \*\*CSV format\*\*
-
-# 4\. Copy the generated URL
-
-# 5\. Paste it into the plugin settings
-
-# 
-
-# \---
-
-# 
-
-# \## 🧩 Installation
-
-# 
-
-# 1\. Download or clone the repository:
-
-# 
-
-# &#x20;  ```
-
-# &#x20;  https://github.com/mracuity/woo-sku-sync
-
-# &#x20;  ```
-
-# 
-
-# 2\. Upload the plugin folder to:
-
-# 
-
-# &#x20;  ```
-
-# &#x20;  /wp-content/plugins/
-
-# &#x20;  ```
-
-# 
-
-# 3\. Activate the plugin from:
-
-# &#x20;  \*\*WordPress Admin → Plugins\*\*
-
-# 
-
-# \---
-
-# 
-
-# \## 🛠️ Configuration
-
-# 
-
-# After activation:
-
-# 
-
-# 1\. Navigate to plugin settings (if UI is enabled)
-
-# 2\. Add your \*\*Google Sheets CSV URL\*\*
-
-# 3\. Trigger sync manually or via scheduled process (if configured)
-
-# 
-
-# \---
-
-# 
-
-# \## 🔄 Sync Behavior
-
-# 
-
-# \* Matches products by \*\*SKU\*\*
-
-# \* Supports \*\*simple and variable products\*\*
-
-# \* Updates:
-
-# 
-
-# &#x20; \* Regular price (default behavior)
-
-# \* Ignores:
-
-# 
-
-# &#x20; \* Missing SKUs
-
-# &#x20; \* Invalid rows
-
-# 
-
-# \---
-
-# 
-
-# \## 🧱 System Requirements
-
-# 
-
-# \* WordPress \*\*5.8+\*\*
-
-# \* PHP \*\*7.4+\*\*
-
-# \* WooCommerce \*\*6.0+\*\*
-
-# 
-
-# \---
-
-# 
-
-# \## 🧪 Version
-
-# 
-
-# \*\*1.0.2\*\*
-
-# 
-
-# \---
-
-# 
-
-# \## 👤 Author
-
-# 
-
-# \*\*Mr. Acuity\*\*
-
-# 🔗 https://github.com/mracuity
-
-# 
-
-# \---
-
-# 
-
-# \## 📜 License
-
-# 
-
-# GPL-2.0+
-
-# 
-
-# \---
-
-# 
-
-# \## 💡 Use Cases
-
-# 
-
-# \* Centralized pricing across multiple WooCommerce stores
-
-# \* Bulk price updates without manual editing
-
-# \* Dropshipping or supplier-based dynamic pricing
-
-# \* Automated catalog maintenance
-
-# 
-
-# \---
-
-# 
-
-# \## ⚠️ Notes
-
-# 
-
-# \* Ensure SKU consistency across your store and CSV
-
-# \* Large catalogs benefit from background processing (already integrated)
-
-# \* Always test on staging before running on production
-
-# 
-
-# \---
-
-# 
-
-# \## 🔮 Future Enhancements (Planned)
-
-# 
-
-# \* Change detection (update only if price differs)
-
-# \* Scheduled auto-sync (cron-based)
-
-# \* Admin dashboard with logs \& sync status
-
-# \* Error reporting system
-
-# \* CSV validation layer
-
-# 
-
-# \---
-
-# 
-
-# \## 🧩 Plugin Metadata
-
-# 
-
-# ```
-
-# Plugin Name: SKU Price Sync System
-
-# Plugin URI:  https://github.com/mracuity/woo-sku-sync
-
-# Description: Syncs WooCommerce product prices from a Google Sheets CSV URL using background processing.
-
-# Version:     1.0.2
-
-# Author:      Mr. Acuity
-
-# License:     GPL-2.0+
-
-# Text Domain: woo-sku-sync
-
-# Requires at least: 5.8
-
-# Requires PHP: 7.4
-
-# WC requires at least: 6.0
-
-# ```
-
-# 
-
-# \---
-
-# 
-
-# \## 🤝 Contributing
-
-# 
-
-# Feel free to fork the repository and submit pull requests for improvements or new features.
-
-# 
-
-# \---
-
-# 
-
-# \## 📬 Support
-
-# 
-
-# For issues or feature requests, open an issue on GitHub.
-
-# 
-
-# \---
-
-
-
+Plugin Name: SKU Price Sync System
+Plugin URI: https://github.com/mracuity/woo-sku-sync
+Description: Syncs WooCommerce product prices from a Google Sheets CSV URL using background processing.
+Version: 1.0.2
+Author: Mr. Acuity
+License: GPL-2.0+
+Text Domain: woo-sku-sync
+Requires at least: 5.8
+Requires PHP: 7.4
+WC requires at least: 6.0
